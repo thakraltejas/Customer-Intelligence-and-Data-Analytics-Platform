@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">💳 Payment History</h1>
+    <a href="{{ url_for('admin_dashboard') }}" class="text-blue-600 hover:underline">← Back to Dashboard</a>
+  </div>
+
+  <!-- Search / Filter -->
+  <form method="GET" action="{{ url_for('payment_history') }}" class="mb-6 flex items-center space-x-2">
+    <input type="text" name="search" placeholder="Search by customer name or email" value="{{ request.args.get('search', '') }}"
+           class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 shadow">
+      Search 🔍
+    </button>
+  </form>
+
+  {% if payments|length == 0 %}
+    <div class="text-center text-gray-600 py-10">
+      <p class="text-lg">No payment records found 😔</p>
+    </div>
+  {% else %}
+    <div class="overflow-x-auto">
+      <table class="w-full table-auto border-collapse">
+        <thead class="bg-blue-600 text-white">
+          <tr>
+            <th class="px-4 py-3 text-left">#</th>
+            <th class="px-4 py-3 text-left">Customer Name</th>
+            <th class="px-4 py-3 text-left">Email</th>
+            <th class="px-4 py-3 text-left">Month</th>
+            <th class="px-4 py-3 text-left">Amount (₹)</th>
+            <th class="px-4 py-3 text-left">Status</th>
+            <th class="px-4 py-3 text-left">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for payment in payments %}
+          <tr class="border-b hover:bg-gray-50 transition">
+            <td class="px-4 py-3">{{ loop.index }}</td>
+            <td class="px-4 py-3 font-medium text-gray-800">{{ payment.customer.name }}</td>
+            <td class="px-4 py-3 text-gray-600">{{ payment.customer.email }}</td>
+            <td class="px-4 py-3 text-gray-700">{{ payment.month }}</td>
+            <td class="px-4 py-3 text-gray-700">{{ payment.amount }}</td>
+            <td class="px-4 py-3">
+              <span class="px-2 py-1 rounded text-xs
+                           {% if payment.status == 'Paid' %}
+                             bg-green-100 text-green-700
+                           {% else %}
+                             bg-red-100 text-red-700
+                           {% endif %}">
+                {{ payment.status }}
+              </span>
+            </td>
+            <td class="px-4 py-3 text-gray-700">{{ payment.date.strftime('%d-%b-%Y') if payment.date else '-' }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

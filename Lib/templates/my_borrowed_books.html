@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="container mx-auto mt-10 px-4">
+  <h2 class="text-2xl font-semibold text-gray-700 mb-6">My Borrowed Books 📖</h2>
+
+  {% if records %}
+  <div class="overflow-x-auto bg-white rounded-lg shadow-md">
+    <table class="min-w-full table-auto border border-gray-200">
+      <thead class="bg-blue-500 text-white">
+        <tr>
+          <th class="py-3 px-4 text-left">Book Title</th>
+          <th class="py-3 px-4 text-left">Borrowed On</th>
+          <th class="py-3 px-4 text-left">Returned On</th>
+          <th class="py-3 px-4 text-center">Status</th>
+          <th class="py-3 px-4 text-center">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in records %}
+        <tr class="border-b hover:bg-blue-50">
+          <td class="py-3 px-4">{{ record.book.title }}</td>
+          <td class="py-3 px-4">{{ record.borrow_date }}</td>
+          <td class="py-3 px-4">{{ record.return_date or '---' }}</td>
+          <td class="py-3 px-4 text-center">
+            {% if record.returned %}
+            <span class="text-green-600 font-semibold">Returned</span>
+            {% else %}
+            <span class="text-yellow-600 font-semibold">Borrowed</span>
+            {% endif %}
+          </td>
+          <td class="py-3 px-4 text-center">
+            {% if not record.returned %}
+            <a href="{{ url_for('return_book', record_id=record.id) }}"
+               class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">Return</a>
+            {% else %}
+            <span class="text-gray-500">Done</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-gray-600 text-lg">You haven’t borrowed any books yet. Go borrow one! 💫</p>
+  {% endif %}
+</main>
+{% endblock %}

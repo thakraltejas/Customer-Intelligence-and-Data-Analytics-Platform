@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-screen bg-gray-50">
+  <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">🏋️‍♂️ Register</h2>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="mb-4 p-3 rounded text-sm 
+                      {% if category == 'success' %} bg-green-100 text-green-700 
+                      {% elif category == 'error' %} bg-red-100 text-red-700 
+                      {% else %} bg-blue-100 text-blue-700 {% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- Registration Form -->
+    <form method="POST" action="{{ url_for('register') }}" class="space-y-5">
+      <!-- Name -->
+      <div>
+        <label for="name" class="block text-gray-600 font-medium mb-2">Full Name</label>
+        <input type="text" id="name" name="name" required
+               class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-gray-600 font-medium mb-2">Email</label>
+        <input type="email" id="email" name="email" required
+               class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      </div>
+
+      <!-- Phone -->
+      <div>
+        <label for="phone" class="block text-gray-600 font-medium mb-2">Phone Number</label>
+        <input type="text" id="phone" name="phone"
+               class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-gray-600 font-medium mb-2">Password</label>
+        <input type="password" id="password" name="password" required
+               class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      </div>
+
+      <!-- Membership Type -->
+      <div>
+        <label for="membership_type" class="block text-gray-600 font-medium mb-2">Membership Type</label>
+        <select id="membership_type" name="membership_type" required
+                class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <option value="Monthly">Monthly</option>
+          <option value="Quarterly">Quarterly</option>
+          <option value="Yearly">Yearly</option>
+        </select>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="flex justify-between items-center mt-6">
+        <a href="{{ url_for('login') }}" class="text-blue-600 hover:underline">Already have an account? Login →</a>
+        <button type="submit" 
+                class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition">
+          Register 💪
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

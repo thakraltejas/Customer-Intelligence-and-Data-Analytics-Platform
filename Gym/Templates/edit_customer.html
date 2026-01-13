@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-screen bg-gray-50">
+  <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-lg">
+    <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">
+      {% if customer %}✏️ Edit Customer{% else %}➕ Add Customer{% endif %}
+    </h2>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="mb-4 p-3 rounded text-sm 
+                      {% if category == 'success' %} bg-green-100 text-green-700 
+                      {% elif category == 'error' %} bg-red-100 text-red-700 
+                      {% else %} bg-blue-100 text-blue-700 {% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- Form -->
+    <form method="POST"
+          action="{% if customer %}{{ url_for('update_customer', id=customer.id) }}{% else %}{{ url_for('add_customer') }}{% endif %}"
+          class="space-y-5">
+
+      <!-- Name -->
+      <div>
+        <label for="name" class="block text-gray-600 font-medium mb-2">Full Name</label>
+        <input type="text" id="name" name="name" required
+               value="{{ customer.name if customer else '' }}"
+               class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-gray-600 font-medium mb-2">Email</label>
+        <input type="email" id="email" name="email" required
+               value="{{ customer.email if customer else '' }}"
+               class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      </div>
+
+      <!-- Phone -->
+      <div>
+        <label for="phone" class="block text-gray-600 font-medium mb-2">Phone Number</label>
+        <input type="text" id="phone" name="phone"
+               value="{{ customer.phone if customer else '' }}"
+               class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-gray-600 font-medium mb-2">
+          Password
+          {% if customer %}<span class="text-sm text-gray-500">(Leave blank to keep current)</span>{% endif %}
+        </label>
+        <input type="password" id="password" name="password"
+               class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      </div>
+
+      <!-- Membership Type -->
+      <div>
+        <label for="membership_type" class="block text-gray-600 font-medium mb-2">Membership Type</label>
+        <select id="membership_type" name="membership_type" required
+                class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <option value="Monthly" {% if customer and customer.membership_type == 'Monthly' %}selected{% endif %}>Monthly</option>
+          <option value="Quarterly" {% if customer and customer.membership_type == 'Quarterly' %}selected{% endif %}>Quarterly</option>
+          <option value="Yearly" {% if customer and customer.membership_type == 'Yearly' %}selected{% endif %}>Yearly</option>
+        </select>
+      </div>
+
+      <!-- Payment Amount -->
+      <div>
+        <label for="payment_amount" class="block text-gray-600 font-medium mb-2">Payment Amount (₹)</label>
+        <input type="number" id="payment_amount" name="payment_amount" step="0.01"
+               value="{{ customer.payment_amount if customer else '' }}"
+               class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      </div>
+
+      <!-- Join Date -->
+      <div>
+        <label for="join_date" class="block text-gray-600 font-medium mb-2">Join Date</label>
+        <input type="date" id="join_date" name="join_date"
+               value="{{ customer.join_date.strftime('%Y-%m-%d') if customer and customer.join_date else '' }}"
+               class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      </div>
+
+      <!-- Next Renewal -->
+      <div>
+        <label for="next_renewal" class="block text-gray-600 font-medium mb-2">Next Renewal</label>
+        <input type="date" id="next_renewal" name="next_renewal"
+               value="{{ customer.next_renewal.strftime('%Y-%m-%d') if customer and customer.next_renewal else '' }}"
+               class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      </div>
+
+      <!-- Entry Time -->
+      <div>
+        <label for="entry_time" class="block text-gray-600 font-medium mb-2">Last Entry Time</label>
+        <input type="time" id="entry_time" name="entry_time"
+               value="{{ customer.entry_time.strftime('%H:%M') if customer and customer.entry_time else '' }}"
+               class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      </div>
+
+      <!-- Submit Button -->
+      <div class="flex justify-between items-center mt-6">
+        <a href="{{ url_for('admin_customers_list') }}" class="text-blue-600 hover:underline">← Back</a>
+        <button type="submit"
+                class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition">
+          {% if customer %}Update{% else %}Add{% endif %} Customer
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

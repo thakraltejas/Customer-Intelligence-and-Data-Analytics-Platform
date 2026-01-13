@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- HERO SECTION -->
+<section class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-20">
+  <div class="max-w-5xl mx-auto text-center px-6">
+    <h1 class="text-5xl font-extrabold mb-4">🏋️‍♂️ Welcome to FitTrack Gym System</h1>
+    <p class="text-lg mb-8 text-blue-100">
+      Manage your members, track attendance, and monitor payments — all in one place.
+    </p>
+
+    <div class="flex justify-center space-x-4">
+      <a href="{{ url_for('login') }}" 
+         class="bg-white text-blue-700 font-semibold px-6 py-3 rounded-lg shadow hover:bg-blue-50 transition">
+        Member Login
+      </a>
+      <a href="{{ url_for('register') }}" 
+         class="bg-yellow-400 text-gray-900 font-semibold px-6 py-3 rounded-lg shadow hover:bg-yellow-300 transition">
+        Join Now 💪
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES SECTION -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-6xl mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold text-gray-800 mb-12">Everything You Need to Run Your Gym Smoothly</h2>
+
+    <div class="grid md:grid-cols-3 gap-10">
+      <!-- Card 1 -->
+      <div class="bg-white shadow-lg rounded-2xl p-6 hover:shadow-xl transition">
+        <div class="text-blue-600 text-4xl mb-3">👤</div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Member Management</h3>
+        <p class="text-gray-600">Register, update, and manage all your gym members from a single dashboard.</p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="bg-white shadow-lg rounded-2xl p-6 hover:shadow-xl transition">
+        <div class="text-blue-600 text-4xl mb-3">💳</div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Payment Tracking</h3>
+        <p class="text-gray-600">Easily monitor monthly, quarterly, or yearly membership payments.</p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="bg-white shadow-lg rounded-2xl p-6 hover:shadow-xl transition">
+        <div class="text-blue-600 text-4xl mb-3">📅</div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Attendance Logs</h3>
+        <p class="text-gray-600">Track customer entry and exit times automatically to keep your gym organized.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA SECTION -->
+<section class="bg-blue-700 text-white py-16">
+  <div class="max-w-4xl mx-auto text-center px-6">
+    <h2 class="text-3xl font-bold mb-4">Ready to level up your gym management?</h2>
+    <p class="text-blue-200 mb-8">
+      Join our smart fitness system today — built for gyms that care about their members.
+    </p>
+    <a href="{{ url_for('register') }}" 
+       class="bg-yellow-400 text-gray-900 px-6 py-3 font-semibold rounded-lg shadow hover:bg-yellow-300 transition">
+       Get Started 🏆
+    </a>
+  </div>
+</section>
+{% endblock %}

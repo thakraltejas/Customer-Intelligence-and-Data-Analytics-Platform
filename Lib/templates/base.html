@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rishabh's Library 📚</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- HEADER / NAVBAR -->
+    <header class="text-gray-600 body-font bg-yellow-500 text-white">
+        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+            <a href="{{ url_for('home') }}" class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    class="w-10 h-10 text-white p-2 bg-yellow-500 rounded-full" viewBox="0 0 24 24">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+                <span class="ml-3 text-xl text-white">Rishabh's Library</span>
+            </a>
+
+            <!-- NAV LINKS -->
+            <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
+                <a href="{{ url_for('home') }}" class="mr-5 hover:text-gray-900">Home</a>
+                <a href="{{ url_for('about') }}" class="mr-5 hover:text-gray-900">About</a>
+
+                {% if session.get('user_id') %}
+                    {% if session.get('is_admin') %}
+                        <!-- Admin Links -->
+                        <a href="{{ url_for('all_users') }}" class="mr-5 hover:text-gray-900">All Users</a>
+                        <a href="{{ url_for('books') }}" class="mr-5 hover:text-gray-900">Books</a>
+                    {% else %}
+                        <!-- Normal User Links -->
+                        <a href="{{ url_for('books') }}" class="mr-5 hover:text-gray-900">Books</a>
+                        <a href="{{ url_for('my_borrowed_books') }}" class="mr-5 hover:text-gray-900">My Books</a>
+                    {% endif %}
+                    <a href="{{ url_for('logout') }}" class="inline-flex items-center border-0 focus:outline-none bg-yellow-400 text-gray-900 p-3 hover:bg-orange-600 rounded text-base mt-4 md:mt-0">
+                        Logout
+                    </a>
+                {% else %}
+                    <!-- Guest Links -->
+                    <a href="{{ url_for('sign_up') }}" class="mr-5 hover:text-gray-900">Sign Up</a>
+                    <a href="{{ url_for('login') }}" class="mr-5 hover:text-gray-900">Login</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <!-- FLASH MESSAGES -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="container mx-auto mt-4">
+          {% for category, message in messages %}
+            <div class="p-3 mb-4 rounded-lg
+              {% if category == 'success' %} bg-green-100 text-green-700
+              {% elif category == 'danger' %} bg-red-100 text-red-700
+              {% elif category == 'warning' %} bg-yellow-100 text-yellow-700
+              {% else %} bg-blue-100 text-blue-700 {% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- MAIN CONTENT -->
+    {% block content %}
+    {% endblock %}
+
+    <!-- FOOTER -->
+    <footer class="text-gray-600 body-font mt-10 bg-gray-100">
+        <div class="container px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
+            <div class="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
+                <a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        class="w-10 h-10 text-white p-2 bg-yellow-500 rounded-full" viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                    <span class="ml-3 text-xl">Rishabh's Library</span>
+                </a>
+                <p class="mt-2 text-sm text-gray-500">
+                    A place where every page sparks imagination, and every story warms the heart and mind.
+                </p>
+            </div>
+            <div class="flex-grow flex flex-wrap md:pl-20 -mb-10 md:mt-0 mt-10 md:text-left text-center">
+                <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+                    <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">Quick Links</h2>
+                    <nav class="list-none mb-10">
+                        <li><a href="{{ url_for('home') }}" class="text-gray-600 hover:text-gray-800">Home</a></li>
+                        <li><a href="{{ url_for('about') }}" class="text-gray-600 hover:text-gray-800">About</a></li>
+                        {% if not session.get('user_id') %}
+                            <li><a href="{{ url_for('sign_up') }}" class="text-gray-600 hover:text-gray-800">Sign Up</a></li>
+                            <li><a href="{{ url_for('login') }}" class="text-gray-600 hover:text-gray-800">Login</a></li>
+                        {% endif %}
+                    </nav>
+                </div>
+                <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+                    <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">Our Services</h2>
+                    <nav class="list-none mb-10">
+                        <li><span class="text-gray-600">Book Borrowing & Return System</span></li>
+                        <li><span class="text-gray-600">Membership Management</span></li>
+                        <li><span class="text-gray-600">Peaceful Reading Rooms</span></li>
+                        <li><span class="text-gray-600">Digital Library Access</span></li>
+                    </nav>
+                </div>
+                <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+                    <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">Resources</h2>
+                    <nav class="list-none mb-10">
+                        <li><span class="text-gray-600">FAQs</span></li>
+                        <li><span class="text-gray-600">Community Blog & News</span></li>
+                        <li><span class="text-gray-600">Library Rules & Policies</span></li>
+                        <li><span class="text-gray-600">Membership Plans & Benefits</span></li>
+                    </nav>
+                </div>
+                <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+                    <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">Contact Us</h2>
+                    <nav class="list-none mb-10">
+                        <li><span class="text-gray-600">+91 9876543210</span></li>
+                        <li><span class="text-gray-600">support@rishabhlibrary.com</span></li>
+                        <li><span class="text-gray-600">Rishabh Library, Main Street</span></li>
+                        <li><span class="text-gray-600">Open: Mon to Sat, 9 to 8</span></li>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gray-200">
+            <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
+                <p class="text-gray-500 text-sm text-center sm:text-left">© 2025 Rishabh —
+                    <a href="https://twitter.com/knyttneve" rel="noopener noreferrer" class="text-gray-600 ml-1" target="_blank">@Rishabh.com</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

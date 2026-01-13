@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rishabh's Gym Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+  <!-- Navbar -->
+  <nav class="bg-blue-600 text-white shadow-lg">
+    <div class="container mx-auto flex justify-between items-center p-4">
+      <a href="{{ url_for('index') }}" class="text-2xl font-semibold">🏋️‍♂️ Rishabh's Gym Manager</a>
+      <div class="space-x-4">
+        {% if session.get('admin_id') %}
+          <a href="{{ url_for('admin_dashboard') }}" class="hover:text-yellow-300">Dashboard</a>
+          <a href="{{ url_for('logout') }}" class="hover:text-yellow-300">Logout</a>
+        {% elif session.get('customer_id') %}
+          <a href="{{ url_for('customer_dashboard') }}" class="hover:text-yellow-300">My Dashboard</a>
+          <a href="{{ url_for('logout') }}" class="hover:text-yellow-300">Logout</a>
+        {% else %}
+          <a href="{{ url_for('login') }}" class="hover:text-yellow-300">Login</a>
+          <a href="{{ url_for('register') }}" class="hover:text-yellow-300">Register</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Flash Messages -->
+  <div class="container mx-auto mt-4">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="mb-4 px-4 py-2 rounded {{ 'bg-green-100 text-green-700' if category == 'success' else 'bg-red-100 text-red-700' }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- Main Content -->
+  <main class="flex-grow container mx-auto p-6">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-blue-600 text-white text-center py-4 mt-auto">
+    <p>&copy; {{ current_year or 2025 }} Rishabh's Gym Management System. All rights reserved.</p>
+  </footer>
+</body>
+</html>

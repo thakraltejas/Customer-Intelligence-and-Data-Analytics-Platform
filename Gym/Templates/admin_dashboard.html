@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto mt-10 px-4">
+
+  <h1 class="text-3xl font-bold text-gray-800 mb-8">🏋️‍♂️ Admin Dashboard</h1>
+
+  <!-- Dashboard Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+
+    <!-- Total Customers -->
+    <div class="bg-blue-600 text-white rounded-lg p-6 shadow hover:shadow-lg transition cursor-pointer"
+     onclick='location.href="{{ url_for("admin_customers_list") }}"'>
+
+      <div class="text-2xl font-bold">{{ total_customers }}</div>
+      <div class="text-gray-200 mt-1">Total Customers</div>
+    </div>
+
+    <!-- Total Revenue -->
+    <div class="bg-green-600 text-white rounded-lg p-6 shadow hover:shadow-lg transition cursor-pointer"
+     onclick='location.href="{{ url_for("payment_history") }}"'>
+      <div class="text-2xl font-bold">₹{{ total_revenue }}</div>
+      <div class="text-gray-200 mt-1">Total Payments Received</div>
+    </div>
+
+    <!-- Active Memberships -->
+    <div class="bg-yellow-500 text-white rounded-lg p-6 shadow hover:shadow-lg transition cursor-pointer"
+         onclick='location.href="{{ url_for("admin_customers_list") }}"'>
+      <div class="text-2xl font-bold">{{ active_memberships }}</div>
+      <div class="text-gray-200 mt-1">Active Memberships</div>
+    </div>
+
+    <!-- Payment Details Icon -->
+    <div class="bg-purple-600 text-white rounded-lg p-6 shadow hover:shadow-lg transition cursor-pointer"
+         onclick='location.href="{{ url_for("payment_history") }}"'>
+      <div class="text-2xl font-bold">💳</div>
+      <div class="text-gray-200 mt-1">Payment Details</div>
+    </div>
+
+  </div>
+
+  <!-- Search Customers -->
+  <form method="get" class="mb-6 flex gap-2">
+    <input type="text" name="search" placeholder="Search customers by name, email, or membership"
+           value="{{ search }}"
+           class="border border-gray-300 rounded px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none">
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Search</button>
+  </form>
+
+  <!-- Customer Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+    {% for customer in customers %}
+    <div class="bg-white rounded-lg shadow p-5 hover:shadow-lg transition cursor-pointer"
+         onclick="location.href='{{ url_for('customer_payment_details', customer_id=customer.id) }}'">
+      <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ customer.name }}</h3>
+      <p class="text-gray-600 mb-1">Email: {{ customer.email }}</p>
+      <p class="text-gray-600 mb-1">Membership: {{ customer.membership_type }}</p>
+      <p class="text-gray-700 font-bold">
+        Total Paid: ₹{{ customer.payments|selectattr('status','equalto','Paid')|map(attribute='amount')|sum }}
+      </p>
+    </div>
+    {% else %}
+    <p class="text-gray-500 col-span-3">No customers found</p>
+    {% endfor %}
+  </div>
+
+  <!-- Recent Payments Table -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-semibold mb-4">Recent Payments</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full table-auto border-collapse">
+        <thead class="bg-gray-100 text-gray-700">
+          <tr>
+            <th class="px-4 py-2 text-left">Customer</th>
+            <th class="px-4 py-2 text-left">Month</th>
+            <th class="px-4 py-2 text-left">Amount</th>
+            <th class="px-4 py-2 text-left">Status</th>
+            <th class="px-4 py-2 text-left">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for payment in payments %}
+          <tr class="border-b hover:bg-gray-50 transition">
+            <td class="px-4 py-2">{{ payment.customer.name }}</td>
+            <td class="px-4 py-2">{{ payment.month }}</td>
+            <td class="px-4 py-2">₹{{ payment.amount }}</td>
+            <td class="px-4 py-2">
+              <span class="px-2 py-1 rounded text-xs
+                           {% if payment.status == 'Paid' %}
+                             bg-green-100 text-green-700
+                           {% else %}
+                             bg-red-100 text-red-700
+                           {% endif %}">
+                {{ payment.status }}
+              </span>
+            </td>
+            <td class="px-4 py-2">{{ payment.date.strftime('%d-%b-%Y') }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
