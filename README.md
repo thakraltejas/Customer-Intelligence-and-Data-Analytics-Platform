@@ -1,6 +1,7 @@
-# 📚 Library Management System
+Customer Intelligence & Data Analytics Platform
 
-A simple Library Management System built using **HTML, Python, and DBMS**. This project helps manage books, users, and library transactions efficiently by automating routine library operations.
+ •Developed a customer intelligence and data analytics platform to track customer records, interactions, and operational data in real time. 
+
 
 ## 🔧 Technologies Used
 
